@@ -1,0 +1,54 @@
+# Release from a version tag: git tag v0.8.3 && git push origin v0.8.3
+# Builds, runs the tests, checks that the tag matches the version in the code (kVersion), creates the package as a ZIP,
+# and creates the GitHub Release. The PDB is not part of the release, only of the run's artifacts (for debugging).
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check that the tag matches the version in the code
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $code = Get-Content -Raw src/win/plugin.cpp
+          if ($code -notmatch 'kVersion = "([^"]+)"') { throw "kVersion was not found in src/win/plugin.cpp" }
+          if ($tag -ne "v$($Matches[1])") { throw "the tag $tag does not match kVersion $($Matches[1])" }
+
+      - name: Build and test
+        shell: cmd
+        run: build.cmd
+
+      - name: Package
+        shell: pwsh
+        run: ./tools/package.ps1 -Zip
+
+      - name: Keep the PDB for debugging
+        uses: actions/upload-artifact@v4
+        with:
+          name: FreeWalk-${{ github.ref_name }}-pdb
+          path: build/msvc-Release/FreeWalk.pdb
+          retention-days: 90
+
+      - name: Create the GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $version = $tag.Substring(1)
+          $zip = "dist/FreeWalk-$version.zip"
+          $flags = @("--title", "FreeWalk $version", "--generate-notes")
+          # A version with a hyphen (e.g. v0.9.0-beta1) is a prerelease.
+          if ($version.Contains("-")) { $flags += "--prerelease" }
+          gh release create $tag $zip @flags
