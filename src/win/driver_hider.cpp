@@ -54,14 +54,17 @@ std::uint64_t DriverHider::find_slot(std::string* reason) const {
                     static_cast<unsigned long long>(actor.value_or(0))));
   // Layout check: the two embedded objects start with the same pointer.
   const auto first = memory_.get<std::uint64_t>(*actor + layout::kActorEmbedded);
-  const auto second = memory_.get<std::uint64_t>(*actor + layout::kActorDriverObject);
-  const auto model = memory_.get<std::uint64_t>(*actor + layout::kActorDriverModel);
+  const std::uint64_t driver_object = *actor + build_->driver_object;
+  const std::uint64_t model_slot = driver_object + layout::kDriverModelInObject;
+  const auto second = memory_.get<std::uint64_t>(driver_object);
+  const auto model = memory_.get<std::uint64_t>(model_slot);
   if (!first || !second || *first != *second || !pointer_ok(*first))
-    return why(strf("vehicle %llX (%s): +0x18 %llX (%s), +0x1DF0 %llX (%s), +0x1DF8 %llX (%s)", static_cast<unsigned long long>(*actor),
+    return why(strf("vehicle %llX (%s): +0x18 %llX (%s), +0x%llX %llX (%s), model %llX (%s)", static_cast<unsigned long long>(*actor),
                     type_of(*actor).c_str(), static_cast<unsigned long long>(first.value_or(0)), type_of(*actor + layout::kActorEmbedded).c_str(),
-                    static_cast<unsigned long long>(second.value_or(0)), type_of(*actor + layout::kActorDriverObject).c_str(),
+                    static_cast<unsigned long long>(build_->driver_object), static_cast<unsigned long long>(second.value_or(0)),
+                    type_of(driver_object).c_str(),
                     static_cast<unsigned long long>(model.value_or(0)), model && *model ? type_of(*model).c_str() : "-"));
-  return *actor + layout::kActorDriverModel;
+  return model_slot;
 }
 
 void DriverHider::hide(std::vector<std::string>& log) {
@@ -75,7 +78,7 @@ void DriverHider::hide(std::vector<std::string>& log) {
   }
   const auto model = memory_.get<std::uint64_t>(slot);
   if (!model || *model == 0) {
-    if (!reported_) log.push_back(strf("driver: no driver model in the slot (vehicle %s)", type_of(slot - layout::kActorDriverModel).c_str()));
+    if (!reported_) log.push_back(strf("driver: no driver model in the slot (vehicle %s)", type_of(slot - layout::kDriverModelInObject - build_->driver_object).c_str()));
     reported_ = true;
     return;
   }

@@ -185,3 +185,17 @@ Elemzés: `freewalk_probe`, `dumpbin /disasm /range` és rövid Python-szkriptek
   osztályleíró `0x1E18FE0`, scene globális `0x36AF7C8`. ATS: `0x46E8C0`, `0x48B290`, `0x6E49B0`, `0x6EC790` (`0x6ECAA0`), `0x1E1B310`,
   `0x36BAD90`.
 - A `+0x3278`/`+0x3280` előfordulása változatlan (6, 11); a `+0x31B0` és a `+0xB1` eggyel több (772, 611) mindkét új fájlban.
+
+## ATS 1.62.1.1 (2026-11-03)
+
+- Időbélyeg `0x6AE990FB`, képméret `0x39DB000`. A mintázat alapján kereső részek mind találnak.
+- A régi ETS2 1.61.1.1s függvényeinek maszkolt bájtmintáival: box builder `0x478040`, region query `0x4949E0`, fény-létrehozó
+  `0x6D4150` (a konstruktorra ugrik: `0x6D4460`), fény-osztályleíró `0x1E4D3D0` (`light_source`, `0x230`).
+- A `gate_model_item` megváltozott (nincs találat). A scene globális ezért a régi build 95 olyan függvényéből jön, amely olvassa
+  (maszkolt minta, ugyanaz az utasítás dekódolva): mind a 95 `0x3719CA8`-at ad.
+- Struktúraeltolások szavazással: a régi build minden `disp32`-használatának befoglaló függvénye maszkolt mintával (az eltolás bájtjai
+  helyettesítők) az új buildben, ott kiolvasva. Változatlan: `+0x31B0` (386 szavazat), `+0x3278`, `+0x3280`, `+0x494` (48), `+0x598`
+  (215), `+0xB1` (274).
+- A sofőr: a játék a sofőr-rajzolót (a TM `driver_draw` mintája, `0x952320`) `lea rcx, [rsi+0x1DF8]`-cal hívja (ETS2 1.61: `+0x1DF0`),
+  vagyis a sofőr objektuma 8 bájttal hátrébb van, a modell mutatója `+0x1E00`-n. Ezért a sofőr eltolása verziónként a táblában van
+  (`GameBuild::driver_object`). Élő teszt: még nincs.

@@ -24,6 +24,8 @@ struct GameBuild {
   std::uint64_t light_class_descriptor;
   std::uint64_t light_constructor;
   std::uint64_t light_creator;  // void* create(void* unused): game-allocator alloc, then the constructor
+  // The driver object in the player's vehicle actor (see "driver" below); the driver model pointer is at +8 of it.
+  std::uint64_t driver_object;
 };
 
 // ETS2: from the TM Real Walk signatures and live tests (docs/game-notes/ets2-1.61.md). ATS: the same functions found in amtrucks.exe
@@ -31,11 +33,15 @@ struct GameBuild {
 // constructor, and the class descriptor names light_source with size 0x230), the scene global from the same gate_model_item
 // instruction (+0x8D).
 inline constexpr GameBuild kBuilds[] = {
-    {"Euro Truck Simulator 2 1.61.1.1s", 0x6AB3C451, 0x398A000, 0x36AE6D8, 0x46D4C0, 0x489E10, 0x1E17F90, 0x6EB290, 0x6EAF80},
-    {"American Truck Simulator 1.61.3.1s", 0x6ABDFBF2, 0x3973000, 0x36B8D70, 0x46E8E0, 0x48B2B0, 0x1E19320, 0x6EC830, 0x6EC520},
+    {"Euro Truck Simulator 2 1.61.1.1s", 0x6AB3C451, 0x398A000, 0x36AE6D8, 0x46D4C0, 0x489E10, 0x1E17F90, 0x6EB290, 0x6EAF80, 0x1DF0},
+    {"American Truck Simulator 1.61.3.1s", 0x6ABDFBF2, 0x3973000, 0x36B8D70, 0x46E8E0, 0x48B2B0, 0x1E19320, 0x6EC830, 0x6EC520, 0x1DF0},
     // The 2026-10-15 updates, found the same way from the ETS2 1.61.1.1s functions.
-    {"Euro Truck Simulator 2 1.61.1.9s", 0x6ACDF049, 0x398B000, 0x36AF7C8, 0x46D550, 0x489EA0, 0x1E18FE0, 0x6EB6A0, 0x6EB390},
-    {"American Truck Simulator 1.61.3.18s", 0x6ACDECAC, 0x3975000, 0x36BAD90, 0x46E8C0, 0x48B290, 0x1E1B310, 0x6ECAA0, 0x6EC790},
+    {"Euro Truck Simulator 2 1.61.1.9s", 0x6ACDF049, 0x398B000, 0x36AF7C8, 0x46D550, 0x489EA0, 0x1E18FE0, 0x6EB6A0, 0x6EB390, 0x1DF0},
+    {"American Truck Simulator 1.61.3.18s", 0x6ACDECAC, 0x3975000, 0x36BAD90, 0x46E8C0, 0x48B290, 0x1E1B310, 0x6ECAA0, 0x6EC790, 0x1DF0},
+    // ATS 1.62 (2026-11-03): gate_model_item changed, so the scene global comes from 95 other functions of ETS2 1.61.1.1s that read it
+    // (masked signatures, the same instruction decoded; all agree). The game calls the driver draw with "lea rcx, [rsi+0x1DF8]"
+    // (ETS2: +0x1DF0): the driver object moved by 8 bytes.
+    {"American Truck Simulator 1.62.1.1", 0x6AE990FB, 0x39DB000, 0x3719CA8, 0x478040, 0x4949E0, 0x1E4D3D0, 0x6D4460, 0x6D4150, 0x1DF8},
 };
 
 inline const GameBuild* find_build(std::uint32_t timestamp, std::uint32_t image_size) {
@@ -74,12 +80,11 @@ inline constexpr std::string_view kInteriorCameraClass = "vehicle_interior_camer
 inline constexpr std::uint64_t kCameraSeatOffset = 0x494;
 inline constexpr std::uint64_t kCameraSeatAngles = 0x598;
 // The driver model in the player's vehicle (TM Real Walk "hide_driver", its older method; live test): the scene object's +0x31B0 is the
-// player's vehicle actor; the actor's +0x18 and +0x1DF0 are two embedded objects with the same first qword (a pointer); +0x1DF8 holds the
-// driver model pointer (0: none).
+// player's vehicle actor; the actor's +0x18 and the driver object (GameBuild::driver_object, +0x1DF0 in ETS2) are two embedded objects
+// with the same first qword (a pointer); the driver object's +8 holds the driver model pointer (0: none).
 inline constexpr std::uint64_t kScenePlayerActor = 0x31B0;
 inline constexpr std::uint64_t kActorEmbedded = 0x18;
-inline constexpr std::uint64_t kActorDriverObject = 0x1DF0;
-inline constexpr std::uint64_t kActorDriverModel = 0x1DF8;
+inline constexpr std::uint64_t kDriverModelInObject = 0x08;
 
 // Console variables (cvars): the game copies both the name and the text value into the object; the setter is vtable entry 1.
 inline constexpr std::string_view kDeveloperCvar = "g_developer";

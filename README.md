@@ -2,7 +2,7 @@
 
 Get out of your truck and walk around it in Euro Truck Simulator 2 and American Truck Simulator.
 
-FreeWalk is a telemetry plugin for Euro Truck Simulator 2 (version 1.61.1.9s) and American Truck Simulator (version 1.61.3.18s),
+FreeWalk is a telemetry plugin for Euro Truck Simulator 2 (version 1.61.1.9s) and American Truck Simulator (version 1.62.1.1),
 Steam, 64-bit. When your truck is parked, press one key and you climb down the cab steps and walk around on foot; press it again and
 you climb back into the cab.
 

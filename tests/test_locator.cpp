@@ -162,6 +162,15 @@ TEST(each_verified_build_has_its_own_addresses) {
   const fw::layout::GameBuild* ats_18 = fw::layout::find_build(0x6ACDECACu, 0x3975000u);
   CHECK(ets2_9 && ets2_9->scene_global == 0x36AF7C8u && ets2_9->light_creator == 0x6EB390u);
   CHECK(ats_18 && ats_18->scene_global == 0x36BAD90u && ats_18->region_query == 0x48B290u);
+  CHECK(ets2_9->driver_object == 0x1DF0u && ats_18->driver_object == 0x1DF0u);
+}
+
+TEST(ats_1_62_has_its_addresses_and_the_moved_driver) {
+  const fw::layout::GameBuild* ats = fw::layout::find_build(0x6AE990FBu, 0x39DB000u);
+  CHECK(ats && ats->scene_global == 0x3719CA8u && ats->box_builder == 0x478040u && ats->region_query == 0x4949E0u);
+  CHECK(ats && ats->light_class_descriptor == 0x1E4D3D0u && ats->light_constructor == 0x6D4460u && ats->light_creator == 0x6D4150u);
+  // In 1.62 the driver object in the vehicle moved by 8 bytes (the game calls the driver draw with +0x1DF8).
+  CHECK(ats && ats->driver_object == 0x1DF8u);
 }
 
 namespace {
