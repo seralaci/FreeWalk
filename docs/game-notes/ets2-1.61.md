@@ -199,3 +199,10 @@ Elemzés: `freewalk_probe`, `dumpbin /disasm /range` és rövid Python-szkriptek
 - A sofőr: a játék a sofőr-rajzolót (a TM `driver_draw` mintája, `0x952320`) `lea rcx, [rsi+0x1DF8]`-cal hívja (ETS2 1.61: `+0x1DF0`),
   vagyis a sofőr objektuma 8 bájttal hátrébb van, a modell mutatója `+0x1E00`-n. Ezért a sofőr eltolása verziónként a táblában van
   (`GameBuild::driver_object`). Élő teszt: még nincs.
+
+## ETS2 1.62.1.0 (2026-11-05)
+
+- Időbélyeg `0x6AEB1934`, képméret `0x39F8000`; ugyanúgy, mint az ATS 1.62-nél: box builder `0x478400`, region query `0x494D30`,
+  fény-létrehozó `0x6D44C0` (konstruktor `0x6D47D0`), osztályleíró `0x1E4D290`; a `gate_model_item` megváltozott, a scene globális
+  96 függvényből egyhangúan `0x3714F30`. A struktúraeltolások változatlanok (`+0x31B0`, `+0x3278`, `+0x3280`, `+0x494`, `+0x598`, `+0xB1`);
+  a sofőr-rajzolót `lea rcx, [rsi+0x1DF8]`-cal hívja (a sofőr objektuma `+0x1DF8`).

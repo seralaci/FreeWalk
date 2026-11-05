@@ -42,7 +42,7 @@
 
 namespace {
 
-constexpr const char* kVersion = "0.9.7";
+constexpr const char* kVersion = "0.9.8";
 constexpr double kTwoPi = 6.28318530717958647692;
 
 struct State {

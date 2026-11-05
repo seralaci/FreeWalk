@@ -42,6 +42,8 @@ inline constexpr GameBuild kBuilds[] = {
     // (masked signatures, the same instruction decoded; all agree). The game calls the driver draw with "lea rcx, [rsi+0x1DF8]"
     // (ETS2: +0x1DF0): the driver object moved by 8 bytes.
     {"American Truck Simulator 1.62.1.1", 0x6AE990FB, 0x39DB000, 0x3719CA8, 0x478040, 0x4949E0, 0x1E4D3D0, 0x6D4460, 0x6D4150, 0x1DF8},
+    // ETS2 1.62 (2026-11-05): the same as ATS 1.62 (scene global from 96 functions, driver object at +0x1DF8).
+    {"Euro Truck Simulator 2 1.62.1.0", 0x6AEB1934, 0x39F8000, 0x3714F30, 0x478400, 0x494D30, 0x1E4D290, 0x6D47D0, 0x6D44C0, 0x1DF8},
 };
 
 inline const GameBuild* find_build(std::uint32_t timestamp, std::uint32_t image_size) {

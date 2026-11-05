@@ -28,8 +28,8 @@ This document covers FreeWalk 0.9.x.
 
 ## Requirements
 
-- Euro Truck Simulator 2, version **1.61.1.9s** (or 1.61.1.1s), or American Truck Simulator, version **1.62.1.1** (or 1.61.3.18s,
-  1.61.3.1s); Steam, 64-bit.
+- Euro Truck Simulator 2, version **1.62.1.0** (or 1.61.1.9s, 1.61.1.1s), or American Truck Simulator, version **1.62.1.1** (or
+  1.61.3.18s, 1.61.3.1s); Steam, 64-bit.
   FreeWalk reads the game's memory and only switches itself on for the exact game builds it was made for. On any other version the
   game still runs normally, but walking stays off, and the log says why.
 - Windows 10 or 11, 64-bit.
