@@ -44,6 +44,9 @@ inline constexpr GameBuild kBuilds[] = {
     {"American Truck Simulator 1.62.1.1", 0x6AE990FB, 0x39DB000, 0x3719CA8, 0x478040, 0x4949E0, 0x1E4D3D0, 0x6D4460, 0x6D4150, 0x1DF8},
     // ETS2 1.62 (2026-11-05): the same as ATS 1.62 (scene global from 96 functions, driver object at +0x1DF8).
     {"Euro Truck Simulator 2 1.62.1.0", 0x6AEB1934, 0x39F8000, 0x3714F30, 0x478400, 0x494D30, 0x1E4D290, 0x6D47D0, 0x6D44C0, 0x1DF8},
+    // The 2026-11-14 patches, found the same way (scene global: 97 and 95 votes; the structure offsets unchanged).
+    {"Euro Truck Simulator 2 1.62.3.3", 0x6AF6FD2F, 0x39F8000, 0x3714FB0, 0x478440, 0x494D70, 0x1E4D270, 0x6D4CB0, 0x6D49A0, 0x1DF8},
+    {"American Truck Simulator 1.62.2.2", 0x6AF70B52, 0x39DD000, 0x371BD28, 0x479100, 0x495AA0, 0x1E4E550, 0x6D59F0, 0x6D56E0, 0x1DF8},
 };
 
 inline const GameBuild* find_build(std::uint32_t timestamp, std::uint32_t image_size) {

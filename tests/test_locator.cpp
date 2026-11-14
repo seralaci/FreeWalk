@@ -172,6 +172,17 @@ TEST(ets2_1_62_has_its_addresses_and_the_moved_driver) {
   CHECK(ets2 && ets2->driver_object == 0x1DF8u);
 }
 
+TEST(the_1_62_patches_have_their_addresses) {
+  const fw::layout::GameBuild* ets2 = fw::layout::find_build(0x6AF6FD2Fu, 0x39F8000u);
+  CHECK(ets2 && ets2->scene_global == 0x3714FB0u && ets2->box_builder == 0x478440u && ets2->region_query == 0x494D70u);
+  CHECK(ets2 && ets2->light_class_descriptor == 0x1E4D270u && ets2->light_constructor == 0x6D4CB0u && ets2->light_creator == 0x6D49A0u);
+  CHECK(ets2 && ets2->driver_object == 0x1DF8u);
+  const fw::layout::GameBuild* ats = fw::layout::find_build(0x6AF70B52u, 0x39DD000u);
+  CHECK(ats && ats->scene_global == 0x371BD28u && ats->box_builder == 0x479100u && ats->region_query == 0x495AA0u);
+  CHECK(ats && ats->light_class_descriptor == 0x1E4E550u && ats->light_constructor == 0x6D59F0u && ats->light_creator == 0x6D56E0u);
+  CHECK(ats && ats->driver_object == 0x1DF8u);
+}
+
 TEST(ats_1_62_has_its_addresses_and_the_moved_driver) {
   const fw::layout::GameBuild* ats = fw::layout::find_build(0x6AE990FBu, 0x39DB000u);
   CHECK(ats && ats->scene_global == 0x3719CA8u && ats->box_builder == 0x478040u && ats->region_query == 0x4949E0u);

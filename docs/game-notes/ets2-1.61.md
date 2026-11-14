@@ -206,3 +206,10 @@ Elemzés: `freewalk_probe`, `dumpbin /disasm /range` és rövid Python-szkriptek
   fény-létrehozó `0x6D44C0` (konstruktor `0x6D47D0`), osztályleíró `0x1E4D290`; a `gate_model_item` megváltozott, a scene globális
   96 függvényből egyhangúan `0x3714F30`. A struktúraeltolások változatlanok (`+0x31B0`, `+0x3278`, `+0x3280`, `+0x494`, `+0x598`, `+0xB1`);
   a sofőr-rajzolót `lea rcx, [rsi+0x1DF8]`-cal hívja (a sofőr objektuma `+0x1DF8`).
+
+## ETS2 1.62.3.3 és ATS 1.62.2.2 (2026-11-14)
+
+- ETS2: `0x6AF6FD2F`/`0x39F8000`, box builder `0x478440`, region query `0x494D70`, fény-létrehozó `0x6D49A0` (konstruktor `0x6D4CB0`),
+  osztályleíró `0x1E4D270`, scene globális `0x3714FB0` (97 szavazat). ATS: `0x6AF70B52`/`0x39DD000`, `0x479100`, `0x495AA0`, `0x6D56E0`
+  (`0x6D59F0`), `0x1E4E550`, `0x371BD28` (95). A struktúraeltolások változatlanok, a sofőr `+0x1DF8`. Egy patch-frissítés is minden fix
+  címet elmozdít.
